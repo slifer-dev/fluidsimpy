@@ -31,3 +31,50 @@ s: scalar field that represents the concentration of the smoke
 a: diffusivity if the smoke in the fluid
 i: inflow of smoke in the domain
 """
+
+from phi import flow
+import matplotlib.pyplot as plt
+
+STEPS = 200
+
+def calculate_next_state(previous_velocity, previous_smoke, dt=1.0) -> None:
+    
+    
+
+def main() -> None:
+    
+    domain = flow.Box(x = 128, y = 128)
+    
+    velocity_field = flow.StaggeredGrid(
+        values = (0.0, 0.0),
+        extrapolation = 0.0
+        x = 64,
+        y = 64,
+        bounds = domain
+    )
+    
+    smoke_field = flow.CenteredGrid(
+        values = 0.0
+        extrapolation = flow.extrapolation.BOUNDARY,
+        x = 256,
+        y = 256,
+        bounds = domain
+    )
+    
+    emitter = flow.CenteredGrid(
+        values = flow.SoftGeometryMask(
+            flow.Sphere(
+                x = 48,
+                y = 8,
+                radius = 16
+            )
+        ),
+        extrapolation = 0,
+        bounds = smoke_field.bounds
+        resolution = smoke_field.resolution
+        
+    )
+    
+if __name__ == '__main__':
+    main()
+    
