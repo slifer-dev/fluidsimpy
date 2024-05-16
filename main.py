@@ -37,12 +37,18 @@ import matplotlib.pyplot as plt
 
 STEPS = 200
 
-def calculate_next_state(previous_velocity, previous_smoke, dt=1.0) -> None:
-    
-    
 
 def main() -> None:
     
+    def calculate_next_state(previous_velocity, previous_smoke, dt=1.0) -> tuple[flow.StaggeredGrid, flow.CenteredGrid]:
+        next_smoke = flow.advect.mac_cormack(previous_smoke, previous_velocity, dt) + inflow_field
+        bouyancy_force = next_smoke * (0.0, 0.1) @ previous_velocity
+        not_zero_div_velocity = flow.advect.semi_lagrangian(previous_velocity, previous_velocity, dt) + bouyancy_force * dt
+        next_velocity, _ = flow.fluid.make_incompressible(not_zero_div_velocity)
+        return next_velocity, next_smoke
+        
+        
+        
     domain = flow.Box(x = 128, y = 128)
     
     velocity_field = flow.StaggeredGrid(
@@ -61,7 +67,7 @@ def main() -> None:
         bounds = domain
     )
     
-    emitter = flow.CenteredGrid(
+    inflow_field = flow.CenteredGrid(
         values = flow.SoftGeometryMask(
             flow.Sphere(
                 x = 48,
