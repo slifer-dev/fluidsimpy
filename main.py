@@ -40,7 +40,7 @@ STEPS = 200
 
 def main() -> None:
     
-    def calculate_next_state(previous_velocity, previous_smoke, dt=1.0) -> tuple[flow.StaggeredGrid, flow.CenteredGrid]:
+    def calculate_next_state(previous_velocity: flow.StaggeredGrid, previous_smoke: flow.CenteredGrid, dt: float = 1) -> tuple[flow.StaggeredGrid, flow.CenteredGrid]:
         next_smoke = flow.advect.mac_cormack(previous_smoke, previous_velocity, dt) + inflow_field
         bouyancy_force = next_smoke * (0.0, 0.1) @ previous_velocity
         not_zero_div_velocity = flow.advect.semi_lagrangian(previous_velocity, previous_velocity, dt) + bouyancy_force * dt
