@@ -1,2 +1,2 @@
 # fluidsimpy
-Fluid simulation by solving navier-stokes momentum equation
+Fluid simulations by solving navier-stokes equations
